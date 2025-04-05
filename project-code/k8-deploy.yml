@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-deploy
+  labels:
+    node: js  
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      node: js
+  template:
+    metadata:
+      name: pod-node
+      labels: 
+        node: js
+    spec:
+      containers:
+        - name: cont-node
+          image: adhmabdein/mynodeimg
+          ports:
+            - containerPort: 3000 # same port inside app.js
+          volumeMounts:
+            - name: pod-volume
+              mountPath: /app/data
+      volumes:
+        - name: pod-volume
+          persistentVolumeClaim:
+            claimName: node-pvc        
